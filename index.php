@@ -1,25 +1,25 @@
 <?php
-$MAX_FILESIZE=512;         //max. filesize in MiB
-$MAX_FILEAGE=180;           //max. age of files in days
-$MIN_FILEAGE=31;            //min. age of files in days
-$DECAY_EXP=2;               //high values penalise larger files more
+$MAX_FILESIZE=256;         //max. filesize in MiB
+$MAX_FILEAGE=null;           //max. age of files in days
+$MIN_FILEAGE=null;            //min. age of files in days
+$DECAY_EXP=null;               //high values penalise larger files more
 
 $UPLOAD_TIMEOUT=5*60;       //max. time an upload can take before it times out
-$ID_LENGTH=3;               //length of the random file ID
+$ID_LENGTH=6;               //length of the random file ID
 $STORE_PATH="files/";       //directory to store uploaded files in
-$LOG_PATH=null;             //path to log uploads + resulting links to
+$LOG_PATH="share.log";             //path to log uploads + resulting links to
 $DOWNLOAD_PATH="%s";        //the path part of the download url. %s = placeholder for filename
 $HTTP_PROTO="https";        //protocol to use in links
-$CLAM_SCAN=false;           //scan files using clamd
+$CLAM_SCAN=true;           //scan files using clamd
 $MAX_EXT_LEN=7;             //max. length for file extensions
 
-$ADMIN_EMAIL="admin@example.com";  //address for inquiries
+$ADMIN_EMAIL="admin@cyx.su";  //address for inquiries
 
 
 // generate a random string of characters with given length
 function rnd_str($len)
 {
-    $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     $max_idx = strlen($chars) - 1;
     $out = '';
     while ($len--)
@@ -142,7 +142,7 @@ function store_file($name, $tmpFile, $formatted = false)
                        $basename);
         if ($formatted)
         {
-            printf('<pre>Access your file here: <a href="%s">%s</a></pre>', $url, $url);
+            printf('<pre>File available here: <a href="%s">%s</a></pre>', $url, $url);
         }
         else
         {
@@ -284,53 +284,53 @@ echo <<<EOT
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>x0.at Filehost</title>
+    <title>share.cyx.su</title>
     <meta name="description" content="Minimalistic service for sharing temporary files." />
 </head>
 <body>
 <pre>
- === How To Upload ===
-You can upload files to this site via a simple HTTP POST, e.g. using curl:
+
+    ________  __ _  __    _____  __  __
+   / ____/\ \/ /| |/ /   / ___/ / / / /
+  / /      \  / |   /    \__ \ / / / / 
+ / /___    / / /   | _  ___/ // /_/ /  
+ \____/   /_/ /_/|_|(_)/____/ \____/   
+                                      
+
+=============================================
+
+		
+=== Uploading ===
+		
+You can upload files to this site via a HTTP POST, e.g. using curl:
 curl -F "file=@/path/to/your/file.jpg" $url
 
 On Windows, you can use <a href="https://getsharex.com/">ShareX</a> and import <a href="$sharex_url">this</a> custom uploader.
-On Android, you can use an app called <a href="https://github.com/Rouji/Hupl">Hupl</a> with <a href="$hupl_url">this</a> uploader.
 
 
 Or simply choose a file and click "Upload" below:
-(Hint: If you're lucky, your browser may support drag-and-drop onto the file 
-selection input.)
-</pre>
-<form id="frm" method="post" enctype="multipart/form-data">
+Note: This page supports drag and drop.
+</pre><form id="frm" method="post" enctype="multipart/form-data">
 <input type="file" name="file" id="file" />
 <input type="hidden" name="formatted" value="true" />
 <input type="submit" value="Upload"/>
-</form>
-<pre>
+</form><pre>
+
+=== File Sizes ===
+	
+The maximum allowed file size is 256 MiB.
 
 
- === File Sizes etc. ===
-The maximum allowed file size is $MAX_FILESIZE MiB.
-
-Files are kept for a minimum of $MIN_FILEAGE, and a maximum of $MAX_FILEAGE Days.
-
-How long a file is kept, depends on its size. Larger files are deleted earlier 
-than small ones. This relation is non-linear and skewed in favour of small 
-files.
-
-The exact formula for determining the maximum age for a file is:
-
-MIN_AGE + (MAX_AGE - MIN_AGE) * (1-(FILE_SIZE/MAX_SIZE))^$DECAY_EXP
+=== Source ===
+	
+The PHP script used to provide this service is open source
+and available on <a href="https://github.com/Rouji/single_php_filehost">GitHub</a>.
 
 
- === Source ===
-The PHP script used to provide this service is open source and available on 
-<a href="https://github.com/Rouji/single_php_filehost">GitHub</a>
-
-
- === Contact ===
-If you want to report abuse of this service, or have any other inquiries, 
-please write an email to $ADMIN_EMAIL
+=== Contact ===
+	
+If you want to report abuse of this service, or have any other
+inquiries please send an email to <a href="mailto:admin@cyx.su">admin@cyx.su</a>
 </pre>
 </body>
 </html>
