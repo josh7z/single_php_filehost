@@ -1,3 +1,4 @@
+#share.cyx.su
 # Single .php Filehost
 Simple PHP script, mainly for sharing random files with people using curl. (and thus in an easily scriptable way)
 
